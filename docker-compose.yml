@@ -15,9 +15,7 @@ services:
             - db
         depends_on:
             - db
-        depoly:
-            mode: global
-            restart_policy: 
+
 
     db:
         image: severalnines/proxysql
