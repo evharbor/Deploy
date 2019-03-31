@@ -48,7 +48,8 @@ sudo yum -y install docker-ce
 2. Build
 
 ```
-docker build -t webserver_web .
+docker build -t webserver_web -f Dockfile_web .
+docker build -t webserver_db -f Dockfile_db .
 ```
 
 ### Deploy the service
