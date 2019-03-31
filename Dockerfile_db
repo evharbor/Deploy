@@ -1,0 +1,5 @@
+FROM severalnines/proxysql:latest
+
+MAINTAINER Ins
+
+COPY ./proxysql.cnf /etc/proxysql.cnf

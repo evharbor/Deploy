@@ -1,0 +1,44 @@
+version: '3.7'
+services:
+    web:
+        image: 10.0.200.219:5000/webserver_web
+        volumes:
+            - ./log:/var/log/evharbor/
+            - ./entrypoint.sh:/entrypoint.sh
+        ports:
+          - target: 80
+            published: 8801
+            protocol: tcp
+            mode: host
+        privileged: true
+        # sysctls:
+            # - net.core.somaxconn=1024
+        tty: true
+        #command: ["entrypoint.sh"]
+        networks:
+            - webserver_network
+        # links:
+        #     - db
+        depends_on:
+            - db
+        deploy:
+            mode: global
+            restart_policy: 
+                condition: on-failure
+                max_attempts: 3
+
+    db:
+        image: severalnines/proxysql
+        #restart: unless-stopped
+        volumes:
+            - ./proxysql.cnf:/etc/proxysql.cnf
+        networks:
+            - webserver_network
+        deploy:
+            mode: global
+            restart_policy: 
+                condition: on-failure
+                max_attempts: 3
+networks:
+    webserver_network:
+        driver: overlay

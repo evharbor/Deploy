@@ -3,24 +3,18 @@ services:
     web:
         image: 10.0.200.219:5000/webserver_web
         volumes:
-            - ./log:/var/log/evharbor/
+            - /var/log/evharbor/:/var/log/evharbor/
         ports:
-            - "8001:80"
-        #privileged: true
+            - "80:80"
+        # privileged: true
         sysctls:
             - net.core.somaxconn=1024
         tty: true
-        #command: ["entrypoint.sh"]
+        restart: always
         links:
             - db
         depends_on:
             - db
-
-
     db:
-        image: severalnines/proxysql
-        restart: unless-stopped
-        volumes:
-            - ./proxysql.cnf:/etc/proxysql.cnf
-        #ports:
-        #    - "6033:6033"
+        image: 10.0.200.219:5000/webserver_db
+        restart: always

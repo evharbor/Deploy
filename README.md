@@ -1,11 +1,11 @@
-## The Deployment of the evharbor in a swarm mode docker enviroment.
+## The Deployment of the evharbor in docker enviroment.
 
 ### Install docker (CentOS)
 1. Uninstall old versions.
 
 ```
 sudo yum remove -y docker \
-	docker-client \
+    docker-client \
     docker-client-latest \
     docker-common \
     docker-latest \
@@ -20,8 +20,8 @@ sudo yum remove -y docker \
 
 ```
 sudo yum install -y yum-utils \
- 	device-mapper-persistent-data \
-	lvm2
+    device-mapper-persistent-data \
+    lvm2
 ```
 
 3. Set up the stable repository
@@ -58,8 +58,3 @@ docker build -t webserver_web .
 docker-compose up -d
 ```
 
-2. Stack deploy in a swarm cluster
-
-```
-docker stack deploy -c docker-compose.yml webserver
-```
