@@ -1,4 +1,4 @@
-FROM 159.226.235.105:5000/centos76-py368-proxysql-rados
+FROM 159.226.91.130:5000/centos76-py36-proxysql-rados
 
 WORKDIR /home/uwsgi/webserver
 
@@ -10,7 +10,8 @@ RUN yum install -y gcc mysql-devel \
     && rm -rf /var/cache/yum
 
 COPY ./ceph /etc/ceph
-COPY ./proxysql.cnf /etc/proxysql.cnf
+COPY ./proxysql/proxysql.db /var/lib/proxysql/proxysql.db
+RUN chown proxysql:proxysql /var/lib/proxysql/proxysql.db
 COPY entrypoint.sh /
 
 EXPOSE 80

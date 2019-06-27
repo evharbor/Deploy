@@ -3,7 +3,7 @@ FROM centos:centos7.6.1810
 RUN echo http_caching=none >> /etc/yum.conf \
     && echo $'[proxysql_repo] \n\
 name= ProxySQL YUM repository \n\
-baseurl=http://repo.proxysql.com/ProxySQL/proxysql-1.4.x/centos/\$releasever \n\
+baseurl=http://repo.proxysql.com/ProxySQL/proxysql-2.0.x/centos/\$releasever \n\
 gpgcheck=1 \n\
 gpgkey=http://repo.proxysql.com/ProxySQL/repo_pub_key \n' > /etc/yum.repos.d/proxysql.repo \
     && cat /etc/yum.repos.d/proxysql.repo \
