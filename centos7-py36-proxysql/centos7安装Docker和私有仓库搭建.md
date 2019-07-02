@@ -24,12 +24,31 @@ systemctl enable docker
 registry是docker官方提供的搭建私有仓库的镜像，用这个镜像运行起来的容器就是一个私有仓库；
 `docker pull registry:latest`
 
+## 设置用户和密码
+创建保存账号密码的文件,用户名username,密码password,请自行设置自己密码和用户名。
+```
+cd /opt/docker-registry/
+mkdir auth
+docker run --entrypoint htpasswd registry -Bbn username password > auth/htpasswd
+```
+
 ## 运行registry镜像
-```docker run -d -p 5000:5000 --restart=always --name private-docker-registry --privileged=true -v /opt/docker-registry:/var/lib/registry registry```
+```
+docker run -d -p 5000:5000 \
+--restart=always \
+--name private-docker-registry \
+--privileged=true \
+-v /opt/docker-registry:/var/lib/registry \
+-v /opt/docker-registry/auth:/auth \
+-e "REGISTRY_AUTH=htpasswd" \
+-e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+-e  REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+registry
+```
 
 说明：  
 * “-d”表示容器在后台运行。
-* “-p 5000:5000”表示将容器的5000端口映射到虚拟机192.168.31.11的5000端口。  
+* “-p 5000:5000”表示将容器的5000端口映射到虚拟机的5000端口。  
 * “–restart=always”表示容器随着docker启动而启动，同时若容器异常终止，会自动启动；  
 实测表明，使用“docker stop”命令停止容器后，此参数不会让容器自动重启。  
 * “–name private-docker-registry”设置容器名。  
@@ -43,7 +62,7 @@ registry是docker官方提供的搭建私有仓库的镜像，用这个镜像运
 ### 将镜像推送到私有仓库 
 * 让docker使用HTTP而不是HTTPS来访问我们刚搭建的私有仓库   
   
-编辑docker配置文件“/etc/docker/daemon.json”，内容如下：
+编辑docker配置文件“/etc/docker/daemon.json”，内容如下(ip地址改为自己ip)：
 ```json
 {
   "insecure-registries": [
@@ -51,7 +70,10 @@ registry是docker官方提供的搭建私有仓库的镜像，用这个镜像运
   ]
 }
 ```
-重启docker，`systemctl restart docker.service`   
+重启docker，`systemctl restart docker.service`  
+
+* 登录
+`docker login 159.226.235.105:5000`,按提示输入自己设置的用户名和密码。
 
 * 将镜像推送到私有仓库   
 以__hello-world__镜像为例，先修改现有镜像的标签：    
