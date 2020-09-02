@@ -1,3 +1,5 @@
+#!/bin/bash
+
 service proxysql start
 
 cd /home/uwsgi/iharbor-s3
